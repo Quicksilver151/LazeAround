@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnygr33o46oq2"]
+
+[ext_resource type="Script" path="res://Code/rigid_body_2d.gd" id="1_jft4o"]
+
+[node name="RigidBody2D" type="RigidBody2D"]
+freeze = true
+script = ExtResource("1_jft4o")
+
+[node name="CollisionPolygon2D1" type="CollisionPolygon2D" parent="."]
+position = Vector2(864, 48)
+polygon = PackedVector2Array(96, -96, 96, 96, -96, 96, -96, -96)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="."]
+position = Vector2(128, 304)
+polygon = PackedVector2Array(96, -96, 96, 96, -96, 96, -96, -96)
