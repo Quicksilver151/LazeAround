@@ -65,6 +65,8 @@ static func cutShape(source_polygon : PackedVector2Array, cut_polygon : PackedVe
 	cut_polygon = rotatePolygon(cut_polygon, cut_trans_global.get_rotation() - source_trans_global.get_rotation())
 	cut_polygon = translatePolygon(cut_polygon, cut_pos)
 	
+	Global.draw_shape(cut_polygon)
+	
 	var intersected_polygons : Array = intersectPolygons(source_polygon, cut_polygon, true)
 	if intersected_polygons.size() <= 0:
 		return {"final" : [], "intersected" : []}
