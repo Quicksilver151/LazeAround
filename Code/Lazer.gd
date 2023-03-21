@@ -34,7 +34,7 @@ func cut():
 			if results.size() == 0:
 				return
 			
-			body.get_node("CollisionPolygon2D").polygon = results[0]
+			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],Global.PolygonDetail)
 			results.pop_front()
 			
 			for result in results:
@@ -43,11 +43,11 @@ func cut():
 					var new_rigid = RigidBody2D.new()
 					var sprite = Sprite2D.new()
 					sprite.texture = load("res://icon.svg")
-					new_rigid.add_child(sprite)
+#					new_rigid.add_child(sprite)
 					
 					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result)
 					new_poly.polygon = PolygonLib.translatePolygon(result, -new_rigid.global_position)
-#					new_poly.polygon = result
+					new_poly.polygon = PolygonLib.simplifyLine(new_poly.polygon,Global.PolygonDetail)
 					new_poly.name = "CollisionPolygon2D"
 					get_parent().add_child(new_rigid)
 #					new_rigid.global_position = body.global_position

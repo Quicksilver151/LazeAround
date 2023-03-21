@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="LazeAround"
-run/main_scene="res://Menu.tscn"
+run/main_scene="res://Scenes/testing_scene.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
 config/icon="res://icon.svg"
 
@@ -22,6 +22,8 @@ Global="*res://Code/Globals.gd"
 [display]
 
 window/subwindows/embed_subwindows=false
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_height"
 
 [input]
 
@@ -33,6 +35,11 @@ f_fullscreen={
 ]
 }
 
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
