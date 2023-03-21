@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccf48fnb7yolu"]
+
+[ext_resource type="PackedScene" uid="uid://cm04cte1lkp0h" path="res://Objects/lazer.tscn" id="1_v4yxj"]
+
+[node name="Testing scene" type="Node2D"]
+
+[node name="Ground" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ground"]
+polygon = PackedVector2Array(64, 528, 704, 528, 1216, 272, 1296, 576, 64, 816, -368, 320, 32, 272)
+
+[node name="Lazer" parent="." instance=ExtResource("1_v4yxj")]
+position = Vector2(272, 320)

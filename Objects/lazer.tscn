@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://cm04cte1lkp0h"]
+
+[ext_resource type="Script" path="res://Code/Lazer.gd" id="1_5he34"]
+[ext_resource type="Script" path="res://Code/Trail.gd" id="1_57cc0"]
+
+[sub_resource type="Curve" id="Curve_blcky"]
+min_value = 0.25
+max_value = 5.0
+_data = [Vector2(0, 1.15086), 0.0, 0.0, 0, 0, Vector2(0.873418, 3.85345), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_kqrj2"]
+offsets = PackedFloat32Array(0.0824742, 0.185567, 0.340206, 1)
+colors = PackedColorArray(1, 0.470588, 0.145098, 0, 1, 0.530919, 0, 1, 1, 0.262099, 0, 1, 1, 0, 0, 1)
+
+[node name="Lazer" type="Node2D"]
+script = ExtResource("1_5he34")
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 1.5
+width_curve = SubResource("Curve_blcky")
+gradient = SubResource("Gradient_kqrj2")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+script = ExtResource("1_57cc0")
+
+[node name="LazerArea" type="Area2D" parent="."]
+
+[node name="LazerPolygon" type="CollisionPolygon2D" parent="LazerArea"]
+polygon = PackedVector2Array(-16, 0, -11, -11, 0, -16, 11, -11, 16, 0, 11, 11, 0, 16, -11, 11)
+metadata/_edit_group_ = true

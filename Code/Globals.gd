@@ -23,7 +23,7 @@ func _unhandled_key_input(event):
 func draw_shape(polygon:PackedVector2Array):
 	line.clear_points()
 	for point in polygon:
-		print(polygon)
+#		print(polygon)
 		line.add_point(point)
 	line.add_point(polygon[0])
 	
