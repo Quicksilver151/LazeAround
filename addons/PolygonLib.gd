@@ -59,8 +59,11 @@ const SUPERSHAPE_2D_EXAMPLES : Dictionary = {
 #get_intersect determines if the the intersected area (area shared by both polygons, the area that is cut out of the source polygon) is returned as well
 #returns dictionary with final : Array and intersected : Array -> all holes are filtered out already
 static func cutShape(source_polygon : PackedVector2Array, cut_polygon : PackedVector2Array, source_trans_global : Transform2D, cut_trans_global : Transform2D) -> Dictionary:
+	cut_trans_global.origin = cut_trans_global.get_scale() * cut_trans_global.origin # cut scalablity
+	
 	var cut_pos : Vector2 = toLocal(cut_trans_global, cut_trans_global.get_origin())
 	
+	cut_polygon = scalePolygon(cut_polygon,cut_trans_global.get_scale()) # cut scalability
 	
 	cut_polygon = rotatePolygon(cut_polygon, cut_trans_global.get_rotation() - source_trans_global.get_rotation())
 	cut_polygon = translatePolygon(cut_polygon, cut_pos)

@@ -7,15 +7,14 @@ func _ready():
 @onready var LazerArea = $LazerArea
 @onready var LazerPolygon = $LazerArea/LazerPolygon
 var displacement = 0
-const MIN_DISTANCE = 5
+const MIN_DISTANCE = 1
 var prev_pos = Vector2.ZERO
+
 func _unhandled_input(event):
 	if event is InputEventMouse:
 		position = get_global_mouse_position()
 		
 		displacement = (prev_pos - position).length()
-		
-		
 		
 		LazerArea.get_overlapping_areas()
 		
@@ -27,7 +26,7 @@ func _unhandled_input(event):
 func cut():
 	for body in LazerArea.get_overlapping_bodies():
 		
-		print(body.get_node("CollisionPolygon2D").polygon)
+#		print(body.get_node("CollisionPolygon2D").polygon)
 		var results = PolygonLib.cutShape(body.get_node("CollisionPolygon2D").polygon,LazerPolygon.polygon,body.get_node("CollisionPolygon2D").get_global_transform(),LazerPolygon.get_global_transform())
 		
 		if results:
