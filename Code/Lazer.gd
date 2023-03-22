@@ -7,7 +7,7 @@ func _ready():
 @onready var LazerArea = $LazerArea
 @onready var LazerPolygon = $LazerArea/LazerPolygon
 var displacement = 0
-const MIN_DISTANCE = 1
+const MIN_DISTANCE = 5
 var prev_pos = Vector2.ZERO
 
 func _unhandled_input(event):
@@ -27,7 +27,7 @@ func cut():
 	for body in LazerArea.get_overlapping_bodies():
 		
 #		print(body.get_node("CollisionPolygon2D").polygon)
-		var results = PolygonLib.cutShape(body.get_node("CollisionPolygon2D").polygon,LazerPolygon.polygon,body.get_node("CollisionPolygon2D").get_global_transform(),LazerPolygon.get_global_transform())
+		var results = PolygonLib.cutShape(body.get_node("CollisionPolygon2D").polygon,LazerPolygon.polygon,body.get_global_transform(), get_global_transform())
 		
 		if results:
 			results = results.final
@@ -35,6 +35,9 @@ func cut():
 				return
 			
 			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],Global.PolygonDetail)
+#			body.position = PolygonLib.calculatePolygonCentroid(body.get_node("CollisionPolygon2D").polygon)
+			
+#			body.get_node("CollisionPolygon2D").polygon = PolygonLib.centerPolygon(body.get_node("CollisionPolygon2D").polygon)
 			results.pop_front()
 			
 			for result in results:
@@ -43,11 +46,12 @@ func cut():
 					var new_rigid = RigidBody2D.new()
 					var sprite = Sprite2D.new()
 					sprite.texture = load("res://icon.svg")
-#					new_rigid.add_child(sprite)
+					new_rigid.add_child(sprite)
+					sprite.scale = Vector2.ONE * 0.3
 					
-					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result)
-					new_poly.polygon = PolygonLib.translatePolygon(result, -new_rigid.global_position)
-					new_poly.polygon = PolygonLib.simplifyLine(new_poly.polygon,Global.PolygonDetail)
+					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result) + body.global_position
+					new_poly.polygon = PolygonLib.simplifyLine(result,Global.PolygonDetail)
+					new_poly.polygon = PolygonLib.translatePolygon(new_poly.polygon, -new_rigid.global_position)
 					new_poly.name = "CollisionPolygon2D"
 					get_parent().add_child(new_rigid)
 #					new_rigid.global_position = body.global_position

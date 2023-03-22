@@ -67,14 +67,17 @@ static func cutShape(source_polygon : PackedVector2Array, cut_polygon : PackedVe
 	
 	cut_polygon = rotatePolygon(cut_polygon, cut_trans_global.get_rotation() - source_trans_global.get_rotation())
 	cut_polygon = translatePolygon(cut_polygon, cut_pos)
-	
-	Global.draw_shape(cut_polygon)
+	source_polygon = rotatePolygon(source_polygon, source_trans_global.get_rotation())
+	source_polygon = translatePolygon(source_polygon,source_trans_global.origin)
+	Global.draw_shape(source_polygon)
 	
 	var intersected_polygons : Array = intersectPolygons(source_polygon, cut_polygon, true)
 	if intersected_polygons.size() <= 0:
 		return {"final" : [], "intersected" : []}
 	
 	var final_polygons : Array = clipPolygons(source_polygon, cut_polygon, true)
+	for i in range(final_polygons.size()):
+		final_polygons[i] = translatePolygon(final_polygons[i], -source_trans_global.origin)
 	
 	return {"final" : final_polygons, "intersected" : intersected_polygons}
 
@@ -561,7 +564,7 @@ static func offsetPolygon(poly : PackedVector2Array, delta : float, exclude_hole
 #my own simplify line code ^^
 static func simplifyLine(line : PackedVector2Array, segment_min_length : float = 100.0) -> PackedVector2Array:
 	var final_line : PackedVector2Array = [line[0]]
-
+	
 	var i : int = 0
 	while i < line.size() - 1:
 		var start : Vector2 = line[i]
