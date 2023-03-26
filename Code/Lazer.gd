@@ -34,12 +34,13 @@ func cut():
 			if results.size() == 0:
 				return
 			
-			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],Global.PolygonDetail)
+			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],1)
+#			body.get_node("CollisionPolygon2D").polygon = results[0]
 #			body.position = PolygonLib.calculatePolygonCentroid(body.get_node("CollisionPolygon2D").polygon)
 			
 #			body.get_node("CollisionPolygon2D").polygon = PolygonLib.centerPolygon(body.get_node("CollisionPolygon2D").polygon)
 			results.pop_front()
-			
+			#TODO: FIX THIS DAMN THING
 			for result in results:
 				if PolygonLib.getPolygonArea(result) > 100:
 					var new_poly = CollisionPolygon2D.new()
@@ -49,9 +50,9 @@ func cut():
 					new_rigid.add_child(sprite)
 					sprite.scale = Vector2.ONE * 0.3
 					
-					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result) + body.global_position
+					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result) + body.position
 					new_poly.polygon = PolygonLib.simplifyLine(result,Global.PolygonDetail)
-					new_poly.polygon = PolygonLib.translatePolygon(new_poly.polygon, -new_rigid.global_position)
+					new_poly.polygon = PolygonLib.translatePolygon(new_poly.polygon, - PolygonLib.calculatePolygonCentroid(result))
 					new_poly.name = "CollisionPolygon2D"
 					get_parent().add_child(new_rigid)
 #					new_rigid.global_position = body.global_position

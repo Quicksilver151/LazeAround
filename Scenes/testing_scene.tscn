@@ -6,6 +6,7 @@
 [node name="Testing scene" type="Node2D"]
 
 [node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(112, 48)
 metadata/_edit_group_ = true
 
 [node name="Icon" type="Sprite2D" parent="Ground"]
@@ -13,7 +14,7 @@ visible = false
 texture = ExtResource("2_0u50s")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ground"]
-polygon = PackedVector2Array(64, 528, 704, 528, 1216, 272, 1296, 576, 64, 816, -368, 320, 32, 272)
+polygon = PackedVector2Array(64, 528, 784, 320, 880, 32, 1296, 576, 64, 816, -368, 320, 400, 192)
 
 [node name="Lazer" parent="." instance=ExtResource("1_v4yxj")]
 position = Vector2(272, 320)
