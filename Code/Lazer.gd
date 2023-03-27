@@ -34,7 +34,7 @@ func cut():
 			if results.size() == 0:
 				return
 			
-			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],1)
+			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],Global.PolygonDetail)
 #			body.get_node("CollisionPolygon2D").polygon = results[0]
 #			body.position = PolygonLib.calculatePolygonCentroid(body.get_node("CollisionPolygon2D").polygon)
 			
