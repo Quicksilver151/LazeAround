@@ -37,7 +37,9 @@ func cut():
 			body.get_node("CollisionPolygon2D").polygon = PolygonLib.simplifyLine(results[0],Global.PolygonDetail)
 #			body.get_node("CollisionPolygon2D").polygon = results[0]
 #			body.position = PolygonLib.calculatePolygonCentroid(body.get_node("CollisionPolygon2D").polygon)
-			
+			if body is RigidBody2D:
+				body.center_of_mass_mode = RigidBody2D.CENTER_OF_MASS_MODE_CUSTOM
+				body.center_of_mass = PolygonLib.calculatePolygonCentroid(body.get_node("CollisionPolygon2D").polygon)
 #			body.get_node("CollisionPolygon2D").polygon = PolygonLib.centerPolygon(body.get_node("CollisionPolygon2D").polygon)
 			results.pop_front()
 			#TODO: FIX THIS DAMN THING
@@ -51,6 +53,8 @@ func cut():
 					sprite.scale = Vector2.ONE * 0.3
 					
 					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result) + body.position
+					new_rigid.center_of_mass_mode = RigidBody2D.CENTER_OF_MASS_MODE_CUSTOM
+					new_rigid.center_of_mass = PolygonLib.calculatePolygonCentroid(result)
 					new_poly.polygon = PolygonLib.simplifyLine(result,Global.PolygonDetail)
 					new_poly.polygon = PolygonLib.translatePolygon(new_poly.polygon, - PolygonLib.calculatePolygonCentroid(result))
 					new_poly.name = "CollisionPolygon2D"

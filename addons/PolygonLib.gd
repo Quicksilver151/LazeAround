@@ -434,6 +434,7 @@ static func createSuperEllipsePolygon(p_number : int, a : float, b : float, n : 
 	return poly
 
 #implemented thanks to Daniel Shiffman´s (@shiffman) coding challenges
+#FIXME below link seems to be broken btw
 #https://thecodingtrain.com/CodingChallenges/023-supershape2d.html
 #http://paulbourke.net/Geometry2D/supershape/
 static func createSupershape2DPolygon(p_number : int, a : float, b : float, m : float, n1 : float, n2 : float, n3 : float, start_angle_deg : float = 0.0, max_angle_deg : float = 360.0, offset := Vector2.ZERO) -> PackedVector2Array:

@@ -1,7 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://c50bst57irjci"]
+[gd_scene load_steps=5 format=3 uid="uid://c50bst57irjci"]
 
 [ext_resource type="Script" path="res://Objects/ObjectAssets/Morphgon2D.gd" id="1_x3ngv"]
 [ext_resource type="Script" path="res://tests/morphgon_testing.gd" id="1_xn3rx"]
+[ext_resource type="Script" path="res://Code/Trail.gd" id="3_fkxc6"]
+
+[sub_resource type="Curve" id="Curve_2b84x"]
+_data = [Vector2(0.0777202, 0.12069), 0.0, 0.0, 0, 0, Vector2(0.709845, 0.732759), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [node name="morphgon_testing" type="Node2D"]
 script = ExtResource("1_xn3rx")
@@ -10,3 +15,8 @@ script = ExtResource("1_xn3rx")
 
 [node name="Morphgon2D" type="CollisionPolygon2D" parent="Marker2D"]
 script = ExtResource("1_x3ngv")
+
+[node name="Line2D" type="Line2D" parent="Marker2D/Morphgon2D"]
+width_curve = SubResource("Curve_2b84x")
+default_color = Color(1, 0, 0, 1)
+script = ExtResource("3_fkxc6")
