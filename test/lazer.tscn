@@ -1,0 +1,110 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpt6mmcmq02ty"]
+
+[ext_resource type="Script" path="res://Code/Trail.gd" id="1_gdl23"]
+
+[sub_resource type="GDScript" id="GDScript_7kcrj"]
+script/source = "extends Area2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+#	Engine.physics_ticks_per_second = 2
+	pass # Replace with function body.
+
+func _physics_process(delta):
+#	var points = $Trail2D.points
+#	extrude_line(points, 50)
+	
+	queue_redraw()
+
+func move(points: PackedVector2Array, offset: Vector2) -> PackedVector2Array:
+	var new_points:PackedVector2Array = []
+	for point in points:
+		new_points.append(point + offset)
+	return new_points
+
+func _draw():
+	var points = $Trail2D.points
+	var normals = compute_normals(points)
+	var extruded = move(extrude_line(points, 10), -global_position)
+	
+	draw_polygon(extruded, PackedColorArray([Color.BLUE]))
+	
+	for i in range(extruded.size()):
+		var point = extruded[i]
+		var somei = i * 1.0 / extruded.size() 
+		var color = Color(somei,0,0)
+		draw_circle(point, 2, color)
+#	for i in normals.size():
+#		draw_line(points[i],points[i]*normals[i], Color.GREEN)
+
+
+func _unhandled_input(event):
+	if event is InputEventMouse:
+		position = get_global_mouse_position()
+
+
+func compute_normals(points: Array) -> Array:
+	# Compute normals for each line segment of the line
+	var normals = []
+	var num_points = points.size()
+	
+	for i in range(num_points):
+		var prev_point = points[i - 1]
+		var current_point = points[i]
+		var next_point = points[(i + 1) % num_points]  # Wrap around to the first point
+		
+		# Compute the direction vectors of the two neighboring segments
+		var normal = Vector2(prev_point.y - current_point.y, current_point.x - prev_point.x)
+		normals.append(normal.normalized())
+	normals.pop_front()
+	normals.pop_back()
+	return normals
+
+func extrude_line(points: Array, distance: float) -> Array:
+	var normals = compute_normals(points)
+	var num_points = points.size()
+	var extruded_points = []
+	
+	for i in range(normals.size()):
+		var current_point = points[i]
+		var normal = normals[i]
+	
+		# Calculate the new point by extruding along the normal
+		var new_point = Vector2(current_point.x + (distance * normal.x), current_point.y + (distance * normal.y))
+		extruded_points.append(new_point)
+	
+	extruded_points.reverse()
+	points.pop_back()
+	points.pop_back()
+	
+	var polygon = points + extruded_points
+	
+	return polygon
+
+
+
+
+
+"
+
+[sub_resource type="Curve" id="Curve_7crwr"]
+_data = [Vector2(0.438356, 0.215517), 0.0, 0.0794922, 0, 0, Vector2(0.979452, 0.655172), -0.0228851, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_s1jpi"]
+offsets = PackedFloat32Array(0, 0.175258, 0.360825)
+colors = PackedColorArray(1, 0.227451, 0.176471, 0.176471, 1, 0.401388, 0.296128, 1, 1, 0, 0, 1)
+
+[node name="Lazer" type="Area2D"]
+script = SubResource("GDScript_7kcrj")
+
+[node name="Trail2D" type="Line2D" parent="."]
+width_curve = SubResource("Curve_7crwr")
+gradient = SubResource("Gradient_s1jpi")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+antialiased = true
+script = ExtResource("1_gdl23")
+point_length = 10

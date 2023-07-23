@@ -1,4 +1,5 @@
 extends Line2D
+class_name Trail2D
 
 @export var point_length: int = 50
 var point_velocity: Vector2 = Vector2()
