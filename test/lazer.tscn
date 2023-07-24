@@ -28,7 +28,8 @@ func _draw():
 	var normals = compute_normals(points)
 	var extruded = move(extrude_line(points, 10), -global_position)
 	
-	draw_polygon(extruded, PackedColorArray([Color.BLUE]))
+	$CollisionPolygon2D.polygon = extruded
+#	draw_polygon(extruded, PackedColorArray([Color.BLUE]))
 	
 	for i in range(extruded.size()):
 		var point = extruded[i]
@@ -100,6 +101,7 @@ colors = PackedColorArray(1, 0.227451, 0.176471, 0.176471, 1, 0.401388, 0.296128
 script = SubResource("GDScript_7kcrj")
 
 [node name="Trail2D" type="Line2D" parent="."]
+visible = false
 width_curve = SubResource("Curve_7crwr")
 gradient = SubResource("Gradient_s1jpi")
 joint_mode = 2
@@ -108,3 +110,5 @@ end_cap_mode = 2
 antialiased = true
 script = ExtResource("1_gdl23")
 point_length = 10
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
