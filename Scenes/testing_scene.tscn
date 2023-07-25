@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=3 uid="uid://ccf48fnb7yolu"]
+[gd_scene load_steps=5 format=3 uid="uid://ccf48fnb7yolu"]
 
-[ext_resource type="PackedScene" uid="uid://cm04cte1lkp0h" path="res://Objects/lazer.tscn" id="1_v4yxj"]
 [ext_resource type="Texture2D" uid="uid://b6utbsh3wy5ru" path="res://icon.svg" id="2_0u50s"]
 [ext_resource type="PackedScene" uid="uid://cpt6mmcmq02ty" path="res://test/lazer.tscn" id="3_11pek"]
 
@@ -24,7 +23,7 @@ absorbent = true
 script = SubResource("GDScript_vfj1x")
 
 [node name="Ground" type="StaticBody2D" parent="."]
-position = Vector2(112, 48)
+position = Vector2(144, -160)
 metadata/_edit_group_ = true
 
 [node name="Icon" type="Sprite2D" parent="Ground"]
@@ -32,10 +31,7 @@ visible = false
 texture = ExtResource("2_0u50s")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ground"]
-polygon = PackedVector2Array(64, 528, 784, 320, 880, 32, 1296, 576, 64, 816, -368, 320, 400, 192)
-
-[node name="Lazer" parent="." instance=ExtResource("1_v4yxj")]
-position = Vector2(272, 320)
+polygon = PackedVector2Array(64, 528, 163.394, 499.286, 235.791, 478.372, 343.49, 447.258, 414.279, 426.808, 480.828, 407.583, 584.983, 377.494, 691.258, 346.792, 735.003, 334.155, 784, 320, 802.202, 265.394, 813.605, 231.184, 827.503, 189.49, 844.431, 138.708, 862.427, 84.7199, 880, 32, 925.127, 91.0124, 977.725, 159.794, 1012.01, 204.635, 1050.05, 254.37, 1107.65, 329.699, 1140.12, 372.159, 1176.48, 419.711, 1208.09, 461.046, 1251.44, 517.726, 1296, 576, 1200, 608, 1121.63, 610.024, 1015.58, 630.715, 941.526, 645.166, 830.082, 666.911, 728.519, 686.728, 640, 704, 554.278, 720.491, 488.711, 733.264, 361.812, 757.985, 268.489, 776.164, 184.551, 792.516, 64, 816, -14.959, 726.742, -48.4922, 688.835, -128, 608, -180.474, 544.175, -233.299, 479.922, -304, 400, -368, 320, -277.696, 304.949, -167.898, 286.65, -71.9702, 270.662, 23.38, 254.77, 112, 240, 182.297, 228.284, 276.492, 212.585, 400, 192, 237.797, 354.203, 173.652, 418.348, 123.762, 468.238)
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
 center_of_mass_mode = 1

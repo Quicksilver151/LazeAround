@@ -638,3 +638,46 @@ class RDP:
 		return a + ab
 
 #-------------------------------------------------------------------------------
+# addendum
+#-------------------------------------------------------------------------------
+
+# note: returns arrays cause packed arrays cannot pop out values
+static func compute_point_normals(points: Array) -> Array:
+	# Compute normals for each line segment of the line
+	var normals = []
+	var num_points = points.size()
+	
+	for i in range(num_points):
+		var prev_point = points[i - 1]
+		var current_point = points[i]
+		var next_point = points[(i + 1) % num_points]  # Wrap around to the first point
+		
+		# Compute the direction vectors of the two neighboring segments
+		var normal = Vector2(prev_point.y - current_point.y, current_point.x - prev_point.x)
+		normals.append(normal.normalized())
+	normals.pop_front()
+	normals.pop_back()
+	return normals
+
+static func extrude_line(points: Array, distance: float) -> Array:
+	var normals = compute_point_normals(points)
+	var num_points = points.size()
+	var extruded_points = []
+	
+	for i in range(normals.size()):
+		var current_point = points[i]
+		var normal = normals[i]
+	
+		# Calculate the new point by extruding along the normal
+		var new_point = Vector2(current_point.x + (distance * normal.x), current_point.y + (distance * normal.y))
+		extruded_points.append(new_point)
+	
+	extruded_points.reverse()
+	points.pop_back()
+	points.pop_back()
+	
+	var polygon = points + extruded_points
+	
+	return polygon
+
+

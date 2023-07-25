@@ -1,6 +1,6 @@
 extends Node
 
-var PolygonDetail: int = 5
+var PolygonDetail: int = 10
 
 # Called when the node enters the scene tree for the first time.
 var line: Line2D = Line2D.new()
