@@ -22,7 +22,7 @@ absorbent = true
 [node name="Testing scene" type="Node2D"]
 script = SubResource("GDScript_vfj1x")
 
-[node name="Ground" type="StaticBody2D" parent="."]
+[node name="Ground" type="StaticBody2D" parent="." groups=["lazable"]]
 position = Vector2(144, -160)
 metadata/_edit_group_ = true
 

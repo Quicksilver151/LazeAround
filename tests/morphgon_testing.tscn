@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://c50bst57irjci"]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://Objects/ObjectAssets/Morphgon2D.gd" id="1_x3ngv"]
+[ext_resource type="Script" path="res://Objects/ObjectAssets/PolyCutter2D.gd" id="1_x3ngv"]
 [ext_resource type="Script" path="res://tests/morphgon_testing.gd" id="1_xn3rx"]
 [ext_resource type="Script" path="res://Code/Trail.gd" id="3_fkxc6"]
 

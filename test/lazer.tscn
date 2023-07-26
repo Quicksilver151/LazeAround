@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpt6mmcmq02ty"]
+[gd_scene load_steps=6 format=3 uid="uid://cpt6mmcmq02ty"]
 
 [ext_resource type="Script" path="res://Code/Trail.gd" id="1_gdl23"]
+[ext_resource type="Script" path="res://Objects/ObjectAssets/PolyCutter2D.gd" id="2_53cgg"]
 
 [sub_resource type="GDScript" id="GDScript_7kcrj"]
 script/source = "extends Area2D
 
+
+@export_range(1,10,0.1) var LineWidth = 5.0
+
 @onready var LazerArea = self
 @onready var LazerPolygon = $LazerPolygon
-var displacement = 0
-const MIN_DISTANCE = 5
-var prev_pos = Vector2.ZERO
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,14 +19,31 @@ func _ready():
 	pass # Replace with function body.
 
 func _physics_process(delta):
-#	var points = $Trail2D.points
-#	extrude_line(points, 50)
-	if PolygonLib.getPolygonArea(LazerPolygon.polygon) < 200:
-		LazerPolygon = $LazerPolygon2
+	for child in get_children():
+		child.hide()
+	
+	if !Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		return
+	
+	set_line_shape()
+	$Trail2D.show()
+	
+	if $Trail2D.points[0].distance_to($Trail2D.points[1]) < 5:
+		$LazerPolygon2.show()
 	else:
-		LazerPolygon = $LazerPolygon
-	queue_redraw()
-	cut()
+		$LazerPolygon.show()
+		
+#	queue_redraw()
+	
+
+func set_line_shape():
+	var points = $Trail2D.points
+	var normals = PolygonLib.compute_point_normals(points)
+	var extruded = PolygonLib.translatePolygon(PolygonLib.extrude_line(points, LineWidth), -global_position)
+	if Geometry2D.triangulate_polygon(extruded).is_empty():
+		print(\"err lmao\")
+	else:
+		$LazerPolygon.polygon = extruded
 
 func move(points: PackedVector2Array, offset: Vector2) -> PackedVector2Array:
 	var new_points:PackedVector2Array = []
@@ -32,66 +51,22 @@ func move(points: PackedVector2Array, offset: Vector2) -> PackedVector2Array:
 		new_points.append(point + offset)
 	return new_points
 
-func _draw():
-	var points = $Trail2D.points
-	var normals = PolygonLib.compute_point_normals(points)
-	var extruded = PolygonLib.translatePolygon(PolygonLib.extrude_line(points, 10), -global_position)
-	
-	$LazerPolygon.polygon = extruded
-#	draw_polygon(extruded, PackedColorArray([Color.BLUE]))
-	
-	for i in range(extruded.size()):
-		var point = extruded[i]
-		var somei = i * 1.0 / extruded.size() 
-		var color = Color(somei,0,0)
-		draw_circle(point, 2, color)
-#	for i in normals.size():
-#		draw_line(points[i],points[i]*normals[i], Color.GREEN)
+#func _draw():
+#
+##	draw_polygon(extruded, PackedColorArray([Color.BLUE]))
+#
+#	for i in range(extruded.size()):
+#		var point = extruded[i]
+#		var somei = i * 1.0 / extruded.size() 
+#		var color = Color(somei,0,0)
+#		draw_circle(point, 2, color)
+##	for i in normals.size():
+##		draw_line(points[i],points[i]*normals[i], Color.GREEN)
 
 
 func _unhandled_input(event):
 	if event is InputEventMouse:
 		position = get_global_mouse_position()
-
-
-func cut():
-	for body in get_overlapping_bodies():
-		
-#		print(body.get_node(\"CollisionPolygon2D\").polygon)
-		var results = PolygonLib.cutShape(body.get_node(\"CollisionPolygon2D\").polygon,LazerPolygon.polygon,body.get_global_transform(), get_global_transform())
-		
-		if results:
-			results = results.final
-			if results.size() == 0:
-				return
-			
-			body.get_node(\"CollisionPolygon2D\").polygon = PolygonLib.simplifyLine(results[0],Global.PolygonDetail)
-#			body.get_node(\"CollisionPolygon2D\").polygon = results[0]
-#			body.position = PolygonLib.calculatePolygonCentroid(body.get_node(\"CollisionPolygon2D\").polygon)
-			if body is RigidBody2D:
-				body.center_of_mass_mode = RigidBody2D.CENTER_OF_MASS_MODE_CUSTOM
-				body.center_of_mass = PolygonLib.calculatePolygonCentroid(body.get_node(\"CollisionPolygon2D\").polygon)
-#			body.get_node(\"CollisionPolygon2D\").polygon = PolygonLib.centerPolygon(body.get_node(\"CollisionPolygon2D\").polygon)
-			results.pop_front()
-			#TODO: FIX THIS DAMN THING
-			for result in results:
-				if PolygonLib.getPolygonArea(result) > 100:
-					var new_poly = CollisionPolygon2D.new()
-					var new_rigid = RigidBody2D.new()
-					var sprite = Sprite2D.new()
-					sprite.texture = load(\"res://icon.svg\")
-					new_rigid.add_child(sprite)
-					sprite.scale = Vector2.ONE * 0.3
-					
-					new_rigid.global_position = PolygonLib.calculatePolygonCentroid(result) + body.position
-					new_rigid.center_of_mass_mode = RigidBody2D.CENTER_OF_MASS_MODE_CUSTOM
-					new_rigid.center_of_mass = PolygonLib.calculatePolygonCentroid(result)
-					new_poly.polygon = PolygonLib.simplifyLine(result,Global.PolygonDetail)
-					new_poly.polygon = PolygonLib.translatePolygon(new_poly.polygon, - PolygonLib.calculatePolygonCentroid(result))
-					new_poly.name = \"CollisionPolygon2D\"
-					get_parent().add_child(new_rigid)
-#					new_rigid.global_position = body.global_position
-					new_rigid.add_child(new_poly)
 
 
 
@@ -110,9 +85,9 @@ colors = PackedColorArray(1, 0.227451, 0.176471, 0.176471, 1, 0.401388, 0.296128
 
 [node name="Lazer" type="Area2D"]
 script = SubResource("GDScript_7kcrj")
+LineWidth = 6.4
 
 [node name="Trail2D" type="Line2D" parent="."]
-visible = false
 width_curve = SubResource("Curve_7crwr")
 gradient = SubResource("Gradient_s1jpi")
 joint_mode = 2
@@ -124,5 +99,11 @@ point_length = 10
 
 [node name="LazerPolygon" type="CollisionPolygon2D" parent="."]
 
+[node name="PolyCutter2D" type="Node2D" parent="LazerPolygon"]
+script = ExtResource("2_53cgg")
+
 [node name="LazerPolygon2" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-16, 0, -11, -11, 0, -16, 11, -11, 16, 0, 11, 11, 0, 16, -11, 11)
+polygon = PackedVector2Array(-10, 0, -7, -7, 0, -10, 7, -7, 10, 0, 7, 7, 0, 10, -7, 7)
+
+[node name="PolyCutter2D" type="Node2D" parent="LazerPolygon2"]
+script = ExtResource("2_53cgg")
